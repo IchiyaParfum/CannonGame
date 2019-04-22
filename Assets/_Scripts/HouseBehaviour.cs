@@ -1,11 +1,13 @@
 ﻿
 using System.Collections;
+using System.Timers;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HouseBehaviour : MonoBehaviour
 {
     public int scoreValue;
+
     private GameController gameController;
 
     // Start is called before the first frame update
@@ -27,16 +29,19 @@ public class HouseBehaviour : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collision");
         if (other.gameObject.CompareTag("Cannonball"))
         {
-            Debug.Log("Cannonball");
             foreach (Transform child in transform)
             {
                 child.gameObject.AddComponent<Rigidbody>();
                 child.gameObject.AddComponent<BoxCollider>();
             }
-            gameController.AddScore(scoreValue);
+            GetComponent<Collider>().enabled = false;   //Building cant be hit anymore
+            gameController.AddScore(scoreValue);    //Add score on game controller
+            Destroy(gameObject, 5); //Destroy game object with delay
+            
         }
+
+
     }
 }
