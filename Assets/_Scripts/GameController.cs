@@ -118,7 +118,7 @@ public class GameController : MonoBehaviour
 
     void CheckState()
     {
-        if (score >= MySceneManager.GetSceneArgs()*10)
+        if (score >= MySceneManager.GetSceneArgs()*100)
         {
             LevelFinished();
         }
