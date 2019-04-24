@@ -28,6 +28,7 @@ public class GameLogic : MonoBehaviour
 
     private int score;
     private int totalScore;
+    private ArrayList tar;
       
 
     void Start()
@@ -38,7 +39,7 @@ public class GameLogic : MonoBehaviour
         
         //Load targets at random into loadedTargets and place them on random spawn locations
         ArrayList spawns = new ArrayList(spawn);
-        print(targets.Length);
+        tar = new ArrayList();
         for(int i = 0; i < MySceneManager.GetSceneArgs(); i++)
         {
             GameObject g = targets[Random.Range(0, targets.Length)];
@@ -48,15 +49,46 @@ public class GameLogic : MonoBehaviour
             GameObject s = (GameObject) spawns[rnd];
             spawns.RemoveAt(rnd);
 
-            Instantiate(g, s.transform.position, s.transform.rotation);
+            tar.Add(Instantiate(g, s.transform.position, s.transform.rotation));
         }
         UpdateScore();
     }
 
     void Update()
     {
-        CheckState();   
+        if(isFinished())
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                MySceneManager.LoadScene("Minigame", MySceneManager.GetSceneArgs() + 1);
+            }
+
+            Time.timeScale = 0; //Stops physics
+            centerText.text = "Level finished\nPress R to continue";
+        }
+        else if (isGameOver())
+        {
+            //TODO Load title screen
+        }
         
+    }
+
+    bool isFinished()
+    {
+        return tar.Count == 0;
+    }
+
+    bool isGameOver()
+    {
+        return false;
+    }
+
+    public void TargetDestroyed(GameObject target)
+    {
+        if (target.tag.Equals("Target"))
+        {
+            tar.Remove(target);
+        }
     }
 
     public void AddScore(int newScoreValue)
@@ -70,23 +102,6 @@ public class GameLogic : MonoBehaviour
         scoreText.text = "Score: " + score + "/" + totalScore;
     }
 
-    void CheckState()
-    {
-        if (score >= totalScore)
-        {
-            LevelFinished();
-        }
-    }
-    void LevelFinished()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            MySceneManager.LoadScene("Minigame", MySceneManager.GetSceneArgs() + 1);
-        }
-
-        Time.timeScale = 0; //Stops physics
-        centerText.text = "Level finished\nPress R to continue";
-    }
 
     void GameOver()
     {

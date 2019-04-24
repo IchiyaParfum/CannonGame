@@ -3,10 +3,12 @@ using System.Collections;
 using System.Timers;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Jobs;
 
 public class HouseBehaviour : MonoBehaviour
 {
     public int scoreValue;
+    public AudioSource sound;
 
     private GameLogic gameController;
 
@@ -36,12 +38,19 @@ public class HouseBehaviour : MonoBehaviour
                 child.gameObject.AddComponent<Rigidbody>();
                 child.gameObject.AddComponent<BoxCollider>();
             }
+
             GetComponent<Collider>().enabled = false;   //Building cant be hit anymore
             gameController.AddScore(scoreValue);    //Add score on game controller
-            Destroy(gameObject, 5); //Destroy game object with delay
-            
+            Invoke("DestroyBuilding", 3);
         }
 
-
     }
+
+    void DestroyBuilding()
+    {
+        gameController.TargetDestroyed(gameObject);
+        Destroy(this.gameObject); //Destroy game object with delay
+    }
+
+
 }

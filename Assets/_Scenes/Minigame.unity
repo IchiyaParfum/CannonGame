@@ -1227,5 +1227,11 @@ PrefabInstance:
       propertyPath: movement
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 3095548111951666957, guid: 9f757a987c1ae124fbcf0fbafd2206c0,
+        type: 3}
+      propertyPath: sound
+      value: 
+      objectReference: {fileID: 134763673549748111, guid: c4a29c9c3a39d3b42b9d69853ba905c5,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f757a987c1ae124fbcf0fbafd2206c0, type: 3}

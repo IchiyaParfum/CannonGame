@@ -10,6 +10,8 @@ public class CannonController : MonoBehaviour
     public GameObject cannonball;
     public Transform[] path;
     public float fireRate;
+    public AudioSource sound; 
+
     private int current;
     private Quaternion rotation;
     private float nextFire;

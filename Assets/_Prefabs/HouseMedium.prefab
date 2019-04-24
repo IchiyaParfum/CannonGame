@@ -1318,6 +1318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreValue: 20
+  sound: {fileID: 134763673549748111, guid: c4a29c9c3a39d3b42b9d69853ba905c5, type: 3}
 --- !u!65 &6947928785927524975
 BoxCollider:
   m_ObjectHideFlags: 0
