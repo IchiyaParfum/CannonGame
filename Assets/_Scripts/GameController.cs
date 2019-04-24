@@ -31,6 +31,7 @@ public class GameController : MonoBehaviour
     public float cbSpeed;
     public float movement; 
     public Transform[] path;
+    public GameObject[] spawn;
     public GameObject[] targets;
     public Boundary boundary;
     public GameObject cannonball;
@@ -39,23 +40,36 @@ public class GameController : MonoBehaviour
     public Text centerText;
 
     private int score;
+    private int totalScore;
     private int current;
     private Quaternion rotation;
     private float nextFire;
+
     
 
     void Start()
     {
-        print(Time.timeScale);
         Time.timeScale = 1;
         score = 0;
-        UpdateScore();
+        totalScore = 0;
+        
         rotation = new Quaternion();
 
-        for(int i = MySceneManager.GetSceneArgs() ; i < targets.Length; i++)
+        //Load targets at random into loadedTargets and place them on random spawn locations
+        ArrayList spawns = new ArrayList(spawn);
+        print(targets.Length);
+        for(int i = 0; i < MySceneManager.GetSceneArgs(); i++)
         {
-            targets[i].SetActive(false);
+            GameObject g = targets[Random.Range(0, targets.Length)];
+            totalScore += g.GetComponent<HouseBehaviour>().scoreValue;
+
+            int rnd = Random.Range(0, spawns.Count);
+            GameObject s = (GameObject) spawns[rnd];
+            spawns.RemoveAt(rnd);
+
+            Instantiate(g, s.transform.position, s.transform.rotation);
         }
+        UpdateScore();
     }
 
     void Update()
@@ -113,12 +127,12 @@ public class GameController : MonoBehaviour
 
     void UpdateScore()
     {
-        scoreText.text = "Score: " + score;
+        scoreText.text = "Score: " + score + "/" + totalScore;
     }
 
     void CheckState()
     {
-        if (score >= MySceneManager.GetSceneArgs()*100)
+        if (score >= totalScore)
         {
             LevelFinished();
         }
