@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable]
-public class Boundary
-{
-    public float xMin, xMax, zMin, zMax;
-}
-
 public class MySceneManager
 {
     private static int nOfTargets = 1;
@@ -25,27 +19,16 @@ public class MySceneManager
     }
 }
 
-public class GameController : MonoBehaviour
+public class GameLogic : MonoBehaviour
 {
-    public float speed;
-    public float cbSpeed;
-    public float movement; 
-    public Transform[] path;
     public GameObject[] spawn;
     public GameObject[] targets;
-    public Boundary boundary;
-    public GameObject cannonball;
-    public float fireRate;
     public Text scoreText;
     public Text centerText;
 
     private int score;
     private int totalScore;
-    private int current;
-    private Quaternion rotation;
-    private float nextFire;
-
-    
+      
 
     void Start()
     {
@@ -53,8 +36,6 @@ public class GameController : MonoBehaviour
         score = 0;
         totalScore = 0;
         
-        rotation = new Quaternion();
-
         //Load targets at random into loadedTargets and place them on random spawn locations
         ArrayList spawns = new ArrayList(spawn);
         print(targets.Length);
@@ -76,47 +57,6 @@ public class GameController : MonoBehaviour
     {
         CheckState();   
         
-        if (Input.GetButton("Fire1") && Time.time > nextFire)
-        {
-            nextFire = Time.time + fireRate;
-            GameObject g = Instantiate(cannonball, transform.position, transform.rotation);
-            g.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, cbSpeed));
-        }
-
-        if(transform.position != path[current].position)
-        {
-            Vector3 pos = Vector3.MoveTowards(transform.position, path[current].position, speed * Time.deltaTime);
-            GetComponent<Rigidbody>().MovePosition(pos);
-        }
-        else if(current < path.Length - 1)
-        {
-            current++;
-        }
-        else
-        {
-            GameOver();
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            rotation[0] -= Time.deltaTime * movement;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rotation[0] += Time.deltaTime * movement;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rotation[1] -= Time.deltaTime * movement;
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rotation[1] += Time.deltaTime * movement;
-        }
-        transform.rotation = Quaternion.Euler(rotation[0], rotation[1], rotation[2]);
     }
 
     public void AddScore(int newScoreValue)

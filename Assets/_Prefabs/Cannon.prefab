@@ -168,7 +168,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8219687848153502827}
-  - component: {fileID: 8219687848153502826}
+  - component: {fileID: 3095548111951666957}
   - component: {fileID: 6287369289582208468}
   m_Layer: 0
   m_Name: Cannon
@@ -193,7 +193,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8219687848153502826
+--- !u!114 &3095548111951666957
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,21 +202,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 8219687848153502869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15438fe7ee22d0f41ba7fd5bbe8e1b65, type: 3}
+  m_Script: {fileID: 11500000, guid: 60fd4036d6b9892428fcad599adb114a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+  speed: 10
+  cbSpeed: 10
   movement: 10
-  path: []
-  boundary:
-    xMin: 0
-    xMax: 0
-    zMin: 0
-    zMax: 0
   cannonball: {fileID: 6127270178102907288, guid: 130e6a631498b364fb7da1e876767aa9,
     type: 3}
+  path:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   fireRate: 1
-  scoreText: {fileID: 0}
 --- !u!54 &6287369289582208468
 Rigidbody:
   m_ObjectHideFlags: 0

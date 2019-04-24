@@ -8,15 +8,15 @@ public class HouseBehaviour : MonoBehaviour
 {
     public int scoreValue;
 
-    private GameController gameController;
+    private GameLogic gameController;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+        GameObject gameControllerObject = GameObject.FindWithTag("GameLogic");
         if (gameControllerObject != null)
         {
-            gameController = gameControllerObject.GetComponent<GameController>();
+            gameController = gameControllerObject.GetComponent<GameLogic>();
         }
 
     }
