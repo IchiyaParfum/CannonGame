@@ -5,12 +5,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Jobs;
 
+
+[RequireComponent(typeof(AudioSource))]
 public class HouseBehaviour : MonoBehaviour
 {
     public int scoreValue;
-    public AudioSource sound;
+    public AudioClip destructionSound;
+    public AudioClip screamingSound;
 
+    private AudioSource source;
     private GameLogic gameController;
+    private float destructionDelay;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +25,8 @@ public class HouseBehaviour : MonoBehaviour
         {
             gameController = gameControllerObject.GetComponent<GameLogic>();
         }
+        source = gameObject.AddComponent<AudioSource>();
+        destructionDelay = Mathf.Max(destructionSound.length, screamingSound.length);
 
     }
 
@@ -33,6 +40,8 @@ public class HouseBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Cannonball"))
         {
+            source.PlayOneShot(destructionSound);
+            source.PlayOneShot(screamingSound);
             foreach (Transform child in transform)
             {
                 child.gameObject.AddComponent<Rigidbody>();
@@ -41,7 +50,8 @@ public class HouseBehaviour : MonoBehaviour
 
             GetComponent<Collider>().enabled = false;   //Building cant be hit anymore
             gameController.AddScore(scoreValue);    //Add score on game controller
-            Invoke("DestroyBuilding", 3);
+            Invoke("DestroyBuilding", destructionDelay);
+            
         }
 
     }

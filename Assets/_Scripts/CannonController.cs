@@ -8,10 +8,12 @@ public class CannonController : MonoBehaviour
     public float cbSpeed;
     public float movement;
     public GameObject cannonball;
-    public Transform[] path;
+    public Transform spawnPosition;
     public float fireRate;
-    public AudioSource sound; 
+    public AudioClip shootSound;
 
+    private AudioSource source;
+    private Vector3[] path;
     private int current;
     private Quaternion rotation;
     private float nextFire;
@@ -21,21 +23,28 @@ public class CannonController : MonoBehaviour
     void Start()
     {
         rotation = new Quaternion();
+        source = gameObject.AddComponent<AudioSource>();
+
+        LineRenderer lr = GetComponent<LineRenderer>();
+        path = new Vector3[lr.positionCount];
+        lr.GetPositions(path);
+
     }
 
     void Update()
     {
         if (Input.GetButton("Fire1") && Time.time > nextFire)
-        {
-            nextFire = Time.time + fireRate;
-            GameObject g = Instantiate(cannonball, transform.position, transform.rotation);
+        {          
+            source.PlayOneShot(shootSound);
+            GameObject g = Instantiate(cannonball, spawnPosition.position, transform.rotation);
             g.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, cbSpeed));
+            nextFire = Time.time + fireRate;
         }
-
-        if (transform.position != path[current].position)
+                
+        if (transform.position != path[current])
         {
-            Vector3 pos = Vector3.MoveTowards(transform.position, path[current].position, speed * Time.deltaTime);
-            GetComponent<Rigidbody>().MovePosition(pos);
+            Vector3 next = Vector3.MoveTowards(transform.position, path[current], speed * Time.deltaTime);
+            GetComponent<Rigidbody>().MovePosition(next);
         }
         else if (current < path.Length - 1)
         {
@@ -62,5 +71,11 @@ public class CannonController : MonoBehaviour
             rotation[1] += Time.deltaTime * movement;
         }
         transform.rotation = Quaternion.Euler(rotation[0], rotation[1], rotation[2]);
+    }
+
+    public bool isFinished()
+    {
+        //Finished when cannon has reached end of path
+        return current >= path.Length - 1f;
     }
 }

@@ -357,7 +357,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreValue: 50
-  sound: {fileID: 134763673549748111, guid: c4a29c9c3a39d3b42b9d69853ba905c5, type: 3}
+  destructionSound: {fileID: 8300000, guid: 6dd2d50c9f7852445aad2736bb75496e, type: 3}
+  screamingSound: {fileID: 8300000, guid: 2b4c4aeedcabde440aea72f0294d819d, type: 3}
 --- !u!65 &8961270519058170601
 BoxCollider:
   m_ObjectHideFlags: 0
