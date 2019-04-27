@@ -26,9 +26,11 @@ public class GameLogic : MonoBehaviour
     public CannonController cannonController;
     public Text scoreText;
     public Text centerText;
+    public Text levelText;
 
     private int score;
     private int totalScore;
+    private int totalLevels;
     private ArrayList tar;
       
 
@@ -37,6 +39,7 @@ public class GameLogic : MonoBehaviour
         Time.timeScale = 1;
         score = 0;
         totalScore = 0;
+        totalLevels = spawn.Length;
 
         //Load targets at random into loadedTargets and place them on random spawn locations
         ArrayList spawns = new ArrayList(spawn);
@@ -54,16 +57,28 @@ public class GameLogic : MonoBehaviour
         }
         UpdateScore();
         UpdateCenter("");
+        UpdateLevel(MySceneManager.GetSceneArgs());
     }
 
     void Update()
     {
-        if(isFinished())
+
+        if (isFinished() && MySceneManager.GetSceneArgs() >= totalLevels)
         {
             Time.timeScale = 0; //Stops physics
+            UpdateCenter("Game finished\nPress any key to restart");
+            if (Input.anyKeyDown && tar.Count == 0)
+            {
+                MySceneManager.LoadScene("Menu", 1);
+            }
+        }
+        else if(isFinished())
+        {
+            
             UpdateCenter("Level finished\nPress R to continue");
             if (Input.GetKeyDown(KeyCode.R))
             {
+                Time.timeScale = 0; //Stops physics
                 MySceneManager.LoadScene("Minigame", MySceneManager.GetSceneArgs() + 1);
             }
         }
@@ -81,7 +96,7 @@ public class GameLogic : MonoBehaviour
 
     bool isFinished()
     {
-        return tar.Count == 0;
+        return score >= totalScore;
     }
 
     bool isGameOver()
@@ -112,5 +127,10 @@ public class GameLogic : MonoBehaviour
     void UpdateCenter(string text)
     {
         centerText.text = text;
+    }
+
+    void UpdateLevel(int level)
+    {
+        levelText.text = "Level: " + level + "/" + totalLevels;
     }
 }

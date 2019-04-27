@@ -10,6 +10,7 @@ using Unity.Jobs;
 public class HouseBehaviour : MonoBehaviour
 {
     public int scoreValue;
+    public bool isDestroyed = false;
     public AudioClip destructionSound;
     public AudioClip screamingSound;
 
@@ -40,6 +41,7 @@ public class HouseBehaviour : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Cannonball"))
         {
+            isDestroyed = true;
             source.PlayOneShot(destructionSound);
             source.PlayOneShot(screamingSound);
             foreach (Transform child in transform)

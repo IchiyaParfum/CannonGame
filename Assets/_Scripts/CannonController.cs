@@ -11,6 +11,7 @@ public class CannonController : MonoBehaviour
     public Transform spawnPosition;
     public float fireRate;
     public AudioClip shootSound;
+    public UnityEngine.UI.Slider pathProgress;
 
     private AudioSource source;
     private Vector3[] path;
@@ -29,6 +30,9 @@ public class CannonController : MonoBehaviour
         path = new Vector3[lr.positionCount];
         lr.GetPositions(path);
 
+        pathProgress.minValue = 0;
+        pathProgress.maxValue = path.Length - 1;
+        pathProgress.value = pathProgress.minValue;
     }
 
     void Update()
@@ -45,10 +49,12 @@ public class CannonController : MonoBehaviour
         {
             Vector3 next = Vector3.MoveTowards(transform.position, path[current], speed * Time.deltaTime);
             GetComponent<Rigidbody>().MovePosition(next);
+            
         }
         else if (current < path.Length - 1)
         {
             current++;
+            pathProgress.value = current;
         }
     }
 
@@ -76,6 +82,6 @@ public class CannonController : MonoBehaviour
     public bool isFinished()
     {
         //Finished when cannon has reached end of path
-        return current >= path.Length - 1f;
+        return current >= path.Length - 1;
     }
 }
