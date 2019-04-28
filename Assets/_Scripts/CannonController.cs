@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface Controllable
 {
+
     bool fireClicked();
     Quaternion Rotation
     {
@@ -15,36 +16,79 @@ public interface Controllable
         get;
         set;
     }
-    void Update();
+    void UpdateControl();
+}
+
+public struct Boundary
+{
+    public Vector3 Max { get; set; } 
+    public Vector3 Min { get; set; }
+
+    public bool inBounds(Vector3 v, out Vector3 inBoundV)
+    {
+        bool inBounds = true;
+        inBoundV = new Vector3();
+
+        for(int i = 0; i < 3; i++)
+        {
+            if(v[i] > Max[i] )
+            {
+                inBoundV[i] = Max[i];
+                //If only one coordinate is not in bounds => not in bounds
+                inBounds = false;
+            }else if(v[i] < Min[i])
+            {
+                inBoundV[i] = Min[i];
+                //If only one coordinate is not in bounds => not in bounds
+                inBounds = false;
+            }
+            else
+            {
+                inBoundV[i] = v[i];
+            }
+        }
+        return inBounds;
+    }
+
+}
+public struct ControllableParameters
+{
+    public float Sensitivity { get; set; }
+    public float Speed { get; set; }
+    public Boundary Boundary { get; set; }
 }
 
 public class KeyboardControllable : Controllable
 {
-    private Quaternion rotation;
-    private int movement = 10;
+    private Vector3 rotation;
+    private ControllableParameters param;
 
+    public KeyboardControllable(ControllableParameters param)
+    {
+        this.param = param;
+    }
     public Quaternion Rotation { get; set; }
     public Vector3 Position { get; set; }
 
-    public void Update()
+    public void UpdateControl()
     {
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            rotation[0] -= Time.deltaTime * movement;
+            rotation[0] -= Time.deltaTime * param.Speed;
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            rotation[0] += Time.deltaTime * movement;
+            rotation[0] += Time.deltaTime * param.Speed;
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            rotation[1] -= Time.deltaTime * movement;
+            rotation[1] -= Time.deltaTime * param.Speed;
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rotation[1] += Time.deltaTime * movement;
+            rotation[1] += Time.deltaTime * param.Speed;
         }
-        Rotation = Quaternion.Euler(rotation[0], rotation[1], rotation[2]);
+        Rotation = Quaternion.Euler(rotation);
     } 
 
     public bool fireClicked()
@@ -60,8 +104,9 @@ public class MouseControllable : Controllable
     private float tile = 4f;
     public Quaternion Rotation { get; set; }
     public Vector3 Position { get; set; }
-    private float speed = 60;
+    private float speed = 200;
     private float angle = 0f;
+
     public bool fireClicked()
     {
         return Input.GetKeyDown(KeyCode.Mouse0);
@@ -69,13 +114,16 @@ public class MouseControllable : Controllable
 
     public void Update(GameObject target)
     {
+        float offset = 100;
+        float sens = 0.05f;
         Vector3 mouse_pos = Input.mousePosition;
         mouse_pos.z = 5f; //The distance between the camera and object
         
         Vector3 object_pos = Camera.main.WorldToScreenPoint(target.transform.position);
 
-        float angleY = 2*Mathf.Atan2(mouse_pos.x - object_pos.x, mouse_pos.z) * Mathf.Rad2Deg;
-        float angleX = - Mathf.Atan2(mouse_pos.y - object_pos.y, mouse_pos.z) * Mathf.Rad2Deg;
+        float angleY = 2*Mathf.Atan2(sens*(mouse_pos.x - object_pos.x), mouse_pos.z) * Mathf.Rad2Deg;
+
+        float angleX = - Mathf.Atan2(sens * (mouse_pos.y - object_pos.y - offset), mouse_pos.z) * Mathf.Rad2Deg;
 
         float dw = Time.deltaTime * speed;
         Debug.Log(angleX);
@@ -111,14 +159,16 @@ public class MouseControllable : Controllable
 
     }
 
-    public void Update()
+    public void UpdateControl()
     {
         //throw new System.NotImplementedException();
     }
 }
 
+
 public class CannonController : MonoBehaviour
 {
+    public MouseController m;
     public float speed;
     public float cbSpeed;
     public float movement;
@@ -134,12 +184,11 @@ public class CannonController : MonoBehaviour
     private Vector3[] path;
     private int current;
     private float nextFire;
-    private MouseControllable m;
 
 
     void Start()
     {
-        m = new MouseControllable();
+        
         Controllable = m;
         source = gameObject.AddComponent<AudioSource>();
 
@@ -179,7 +228,7 @@ public class CannonController : MonoBehaviour
 
     void FixedUpdate()
     {
-        m.Update(gameObject);  //Update controllable
+        Controllable.UpdateControl();  //Update controllable
     }
 
     public bool isFinished()
