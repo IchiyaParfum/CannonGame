@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public enum GameState
+
+public enum Difficulty
 {
-    Active,
-    GameOver,
-    Finished
+    Easy = 0,
+    Medium = 1,
+    Hard = 2
 }
 
 
@@ -27,11 +28,13 @@ public class GameLogic : MonoBehaviour
     private int totalLevels;
     private int intactTargets;
     private int aliveTargets;
-    
-    
-    public GameLogic()
+
+
+    private enum GameState
     {
-        
+        Active,
+        GameOver,
+        Finished
     }
 
     void Start()
@@ -40,7 +43,7 @@ public class GameLogic : MonoBehaviour
 
         //Load targets at random and place them on random spawn locations
         List<int> possible = Enumerable.Range(0, spawn.Length).ToList();
-        for (int i = 0; i < Mathf.Min(1, spawn.Length); i++)
+        for (int i = 0; i < Mathf.Min(getBuildingCount(MySceneManager.Parameters.Level, MySceneManager.Parameters.Difficulty), spawn.Length); i++)
         {
             //Choose random target from list
             GameObject g = targets[Random.Range(0, targets.Length)];
@@ -58,7 +61,7 @@ public class GameLogic : MonoBehaviour
         }
         UpdateScore();
         UpdateCenter("");
-        UpdateLevel(3);
+        UpdateLevel(MySceneManager.Parameters.Level);
     }
 
     void Update()
@@ -84,13 +87,14 @@ public class GameLogic : MonoBehaviour
                 if (aliveTargets <= 0)
                 {
                     //All targets have been destroyed
-                    if (totalLevels >= totalLevels)
+                    if (getBuildingCount(MySceneManager.Parameters.Level, MySceneManager.Parameters.Difficulty) >= totalLevels)
                     {
                         UpdateCenter("You Won");
                     }
                     else
                     {
-                        //Load next level with one more target
+                        //Load next level
+                        MySceneManager.Parameters.Level++;
                         MySceneManager.LoadScene(MySceneManager.Scenes.Game);
                     }
                 }
@@ -99,10 +103,15 @@ public class GameLogic : MonoBehaviour
                 //Wait for user to press any button
                 if (Input.anyKeyDown)
                 {
-                    MySceneManager.LoadScene(MySceneManager.Scenes.Game);
+                    MySceneManager.LoadScene(MySceneManager.Scenes.Menu);
                 }
                 break;
         }
+    }
+
+    public static int getBuildingCount(int level, Difficulty difficulty)
+    {
+        return level;
     }
 
     public void TargetHit(Target target)

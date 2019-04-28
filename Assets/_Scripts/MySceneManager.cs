@@ -1,9 +1,56 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class SceneParameters
+{
+    public Difficulty Difficulty { get; set; }
+    public ControllableFactory.Controllables Controllables { get; set; }
+    private int level;
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+        set
+        {
+            if(value > 0)
+            {
+                level = value;
+            }
+        }
+    }
+    private float volume;
+    public float Volume
+    {
+        get
+        {
+            return volume;
+        }
+        set
+        {
+            if(value >= 0 && value <= 1)
+            {
+                volume = value;
+            }
+        }
+    }
+}
 
 public class MySceneManager
 {
+    static MySceneManager()
+    {
+        //Create default parameters
+        SceneParameters p = new SceneParameters();
+        p.Difficulty = Difficulty.Medium;
+        p.Level = 1;
+        p.Volume = 1f;
+        Parameters = p;
+    }
+
     public sealed class Scenes
     {
         public static readonly Scenes Menu = new Scenes("Menu");
@@ -12,26 +59,16 @@ public class MySceneManager
 
         private Scenes(string value)
         {
-            Value = value;
+            Value = value;      
         }
 
         public string Value { get; private set; }
     }
-
-    public static Dictionary<Scenes, object> Parameters { get; private set; }
+    public static SceneParameters Parameters { get; set; }
 
     public static void LoadScene(Scenes scene)
     {
         Application.LoadLevel(scene.Value);
     }
 
-    public static void SaveParameters(Scenes scene, object data)
-    {
-        if (Parameters.ContainsKey(scene))
-        {
-            //Remove data if it already exists
-            Parameters.Remove(scene);   
-        }
-        Parameters.Add(scene, data);
-    }
 }

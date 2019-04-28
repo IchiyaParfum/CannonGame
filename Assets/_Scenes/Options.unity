@@ -396,7 +396,7 @@ RectTransform:
   - {fileID: 1298301282}
   - {fileID: 330293884}
   m_Father: {fileID: 593367660}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -412,10 +412,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 121155669}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1184210157, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5976dabf5be52224fa0486feef250f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 0
+  toggles:
+  - {fileID: 330293886}
+  - {fileID: 1298301284}
 --- !u!1 &188081124
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +564,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5, y: 68}
+  m_AnchoredPosition: {x: -126, y: 68}
   m_SizeDelta: {x: 110, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &330293885
@@ -617,13 +619,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1047141751}
   toggleTransition: 1
   graphic: {fileID: 1362323942}
-  m_Group: {fileID: 121155671}
+  m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!1 &330824484
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,7 +975,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1005120393}
   toggleTransition: 1
   graphic: {fileID: 117339307}
-  m_Group: {fileID: 1098353384}
+  m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1093,9 +1095,9 @@ RectTransform:
   - {fileID: 1029872164}
   - {fileID: 71576855}
   - {fileID: 1949779172}
+  - {fileID: 1098353383}
   - {fileID: 121155670}
   - {fileID: 1252362179}
-  - {fileID: 1098353383}
   - {fileID: 1677873621}
   m_Father: {fileID: 1891429260}
   m_RootOrder: 1
@@ -1808,7 +1810,7 @@ Transform:
   - {fileID: 1371455236}
   - {fileID: 514742629}
   m_Father: {fileID: 593367660}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1098353384
 MonoBehaviour:
@@ -1819,10 +1821,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1098353382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1184210157, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5976dabf5be52224fa0486feef250f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 0
+  toggles:
+  - {fileID: 1273029907}
+  - {fileID: 1371455237}
+  - {fileID: 514742630}
 --- !u!1 &1232531922
 GameObject:
   m_ObjectHideFlags: 0
@@ -2008,7 +2013,7 @@ RectTransform:
   - {fileID: 188081125}
   - {fileID: 1939443032}
   m_Father: {fileID: 593367660}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2141,10 +2146,21 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2022414974}
   toggleTransition: 1
   graphic: {fileID: 327420395}
-  m_Group: {fileID: 1098353384}
+  m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 593367663}
+        m_MethodName: Toggle
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ds
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1
@@ -2263,7 +2279,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -115.45, y: 68}
+  m_AnchoredPosition: {x: -5.449997, y: 68}
   m_SizeDelta: {x: 110.9, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1298301283
@@ -2318,13 +2334,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 632730845}
   toggleTransition: 1
   graphic: {fileID: 844099585}
-  m_Group: {fileID: 121155671}
+  m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1338273746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2571,7 +2587,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1976903142}
   toggleTransition: 1
   graphic: {fileID: 1244145538}
-  m_Group: {fileID: 1098353384}
+  m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2781,6 +2797,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: MENU
+      objectReference: {fileID: 0}
+    - target: {fileID: 2223602479409457024, guid: 67ff7e5153841d44399989df786085d7,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 593367663}
+    - target: {fileID: 2223602479409457024, guid: 67ff7e5153841d44399989df786085d7,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenMenu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67ff7e5153841d44399989df786085d7, type: 3}

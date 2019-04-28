@@ -3,6 +3,145 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+public class ControllableFactory
+{
+    private ControllableFactory factory;
+    public enum Controllables
+    {
+        Keyboard = 0,
+        Mouse = 1
+    }
+    public struct ControllableParameters
+    {
+        public float Sensitivity { get; set; }
+        public float Speed { get; set; }
+        public Boundary Boundary { get; set; }
+    }
+    public static ControllableFactory getInstance()
+    {
+        return new ControllableFactory();
+    }
+    public Controllable createControllable(Controllables c, ControllableParameters p)
+    {
+        switch (c)
+        {
+            case Controllables.Keyboard:
+                GameObject.FindGameObjectWithTag("MouseController").SetActive(false);
+                return new KeyboardControllable(p);
+            case Controllables.Mouse:
+                GameObject.FindGameObjectWithTag("MouseController").SetActive(true);
+                return new MouseControllable(getMouseController(), p);
+        }
+        return null;
+    }
+    private MouseController getMouseController()
+    {
+        GameObject g = GameObject.FindGameObjectWithTag("MouseController");
+        return g.GetComponent<MouseController>();
+    }
+    public Controllable createControllable(Controllables c)
+    {
+        ControllableParameters p = new ControllableParameters();
+        p.Boundary = new Boundary(new Vector3(-180, -180, -180), new Vector3(180, 180, 180));
+        p.Sensitivity = 1;
+        switch (c)
+        {
+            case Controllables.Keyboard:
+                p.Speed = 80;
+                break;
+            case Controllables.Mouse:
+                p.Speed = 80;
+                break;
+        }
+        return createControllable(c, p);
+    }
+    private class KeyboardControllable : Controllable
+    {
+        private Vector3 rotation;
+        private ControllableParameters param;
+
+        public KeyboardControllable(ControllableParameters param)
+        {
+            this.param = param;
+        }
+        public Quaternion Rotation { get; set; }
+        public Vector3 Position { get; set; }
+
+        public void Update()
+        {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                rotation[0] -= Time.deltaTime * param.Speed;
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                rotation[0] += Time.deltaTime * param.Speed;
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                rotation[1] -= Time.deltaTime * param.Speed;
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                rotation[1] += Time.deltaTime * param.Speed;
+            }
+            Rotation = Quaternion.Euler(rotation);
+        }
+
+        public bool fireClicked()
+        {
+            return Input.GetKeyDown(KeyCode.LeftControl);
+        }
+
+    }
+    private class MouseControllable : Controllable
+    {
+        public Quaternion Rotation { get; set; }
+        public Vector3 Position { get; set; }
+
+        private MouseController mc;
+        private ControllableParameters param;
+        private Vector3 rotation = new Vector3();
+
+        public MouseControllable(MouseController mc, ControllableParameters param)
+        {
+            this.param = param;
+            this.mc = mc;
+
+        }
+        public bool fireClicked()
+        {
+            return Input.GetKeyDown(KeyCode.Mouse0);
+        }
+
+        public void Update()
+        {
+            //Only change position if left controll is pressed => Easier to control and shoot together
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                if (mc.Keys[MouseController.Key.MouseUp].Focused)
+                {
+                    rotation[0] -= Time.deltaTime * param.Speed;
+                }
+                if (mc.Keys[MouseController.Key.MouseDown].Focused)
+                {
+                    rotation[0] += Time.deltaTime * param.Speed;
+                }
+                if (mc.Keys[MouseController.Key.MouseLeft].Focused)
+                {
+                    rotation[1] -= Time.deltaTime * param.Speed;
+                }
+                if (mc.Keys[MouseController.Key.MouseRight].Focused)
+                {
+                    rotation[1] += Time.deltaTime * param.Speed;
+                }
+                param.Boundary.inBounds(rotation, out rotation);
+                Rotation = Quaternion.Euler(rotation);
+            }
+        }
+    }
+    
+}
 public interface Controllable
 {
 
@@ -19,7 +158,6 @@ public interface Controllable
     }
     void Update();
 }
-
 public class Boundary
 {
     public Vector3 Max { get; set; } 
@@ -57,107 +195,6 @@ public class Boundary
     }
 
 }
-public struct ControllableParameters
-{
-    public float Sensitivity { get; set; }
-    public float Speed { get; set; }
-    public Boundary Boundary { get; set; }
-}
-
-public class KeyboardControllable : Controllable
-{
-    private Vector3 rotation;
-    private ControllableParameters param;
-
-    public KeyboardControllable(ControllableParameters param)
-    {
-        this.param = param;
-    }
-    public Quaternion Rotation { get; set; }
-    public Vector3 Position { get; set; }
-
-    public void Update()
-    {
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            rotation[0] -= Time.deltaTime * param.Speed;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            rotation[0] += Time.deltaTime * param.Speed;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            rotation[1] -= Time.deltaTime * param.Speed;
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rotation[1] += Time.deltaTime * param.Speed;
-        }
-        Rotation = Quaternion.Euler(rotation);
-    } 
-
-    public bool fireClicked()
-    {
-        return Input.GetKeyDown(KeyCode.LeftControl);
-    }
-
-}
-
-public class MouseControllable : Controllable
-{
-    public Quaternion Rotation { get; set; }
-    public Vector3 Position { get; set; }
-
-    private MouseController mc;
-    private ControllableParameters param;
-    private Vector3 rotation = new Vector3();
-
-    public MouseControllable(ControllableParameters param)
-    {
-        this.param = param;
-        try
-        {
-            mc = GameObject.FindGameObjectWithTag("MouseController").GetComponent<MouseController>();
-        }
-        catch (Exception ex) when (ex is UnityException || ex is NullReferenceException)
-        {
-            Debug.Log(ex);
-        }
-        
-    }
-    public bool fireClicked()
-    {
-        return Input.GetKeyDown(KeyCode.Mouse0);
-    }
-
-    public void Update()
-    {
-        //Only change position if left controll is pressed => Easier to control and shoot together
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            if (mc.Keys[MouseController.Key.MouseUp].Focused)
-            {
-                rotation[0] -= Time.deltaTime * param.Speed;
-            }
-            if (mc.Keys[MouseController.Key.MouseDown].Focused)
-            {
-                rotation[0] += Time.deltaTime * param.Speed;
-            }
-            if (mc.Keys[MouseController.Key.MouseLeft].Focused)
-            {
-                rotation[1] -= Time.deltaTime * param.Speed;
-            }
-            if (mc.Keys[MouseController.Key.MouseRight].Focused)
-            {
-                rotation[1] += Time.deltaTime * param.Speed;
-            }
-            param.Boundary.inBounds(rotation, out rotation);
-            Rotation = Quaternion.Euler(rotation);
-        }
-    }
-}
-
 public class CannonController : MonoBehaviour
 {
     public GameObject cannonball;
@@ -177,10 +214,7 @@ public class CannonController : MonoBehaviour
 
     void Start()
     {
-        ControllableParameters p = new ControllableParameters();
-        p.Speed = 80;
-        p.Boundary = new Boundary(new Vector3(-180, -180, -180), new Vector3(180, 180, 180));
-        controllable = new MouseControllable(p);
+        controllable = ControllableFactory.getInstance().createControllable(MySceneManager.Parameters.Controllables);
 
         source = gameObject.AddComponent<AudioSource>();    //Add audio source to play sounds afterwards
 
