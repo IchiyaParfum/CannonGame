@@ -7,6 +7,7 @@ TagManager:
   - Cannonball
   - Target
   - GameLogic
+  - MouseController
   layers:
   - Default
   - TransparentFX

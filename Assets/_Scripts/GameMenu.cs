@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PauseMenuScript : MonoBehaviour
+public class GameMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject PauseMenuUi;
+    public GameObject GameUi;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,12 +21,10 @@ public class PauseMenuScript : MonoBehaviour
             if (GameIsPaused)
             {
                 Resume();
-                print("Resume");
             }
             else
             {
                 Pause();
-                print("Pause");
             }
         }
     }
@@ -33,6 +32,7 @@ public class PauseMenuScript : MonoBehaviour
     public void Resume()
     {
         PauseMenuUi.SetActive(false);
+        GameUi.SetActive(true);
         Time.timeScale = 1f;
         GameIsPaused = false;
     }
@@ -40,6 +40,7 @@ public class PauseMenuScript : MonoBehaviour
     public void Pause()
     {
         PauseMenuUi.SetActive(true);
+        GameUi.SetActive(false);
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
@@ -51,6 +52,6 @@ public class PauseMenuScript : MonoBehaviour
 
     public void LoadMenu()
     {
-        MySceneManager.LoadScene("Menu", 1);
+        MySceneManager.LoadScene(MySceneManager.Scenes.Menu);
     }
 }

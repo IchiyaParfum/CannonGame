@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public interface Controllable
 {
@@ -16,14 +17,19 @@ public interface Controllable
         get;
         set;
     }
-    void UpdateControl();
+    void Update();
 }
 
-public struct Boundary
+public class Boundary
 {
     public Vector3 Max { get; set; } 
     public Vector3 Min { get; set; }
 
+    public Boundary(Vector3 min, Vector3 max)
+    {
+        this.Min = min;
+        this.Max = max;
+    }
     public bool inBounds(Vector3 v, out Vector3 inBoundV)
     {
         bool inBounds = true;
@@ -70,7 +76,7 @@ public class KeyboardControllable : Controllable
     public Quaternion Rotation { get; set; }
     public Vector3 Position { get; set; }
 
-    public void UpdateControl()
+    public void Update()
     {
         if (Input.GetKey(KeyCode.UpArrow))
         {
@@ -100,102 +106,97 @@ public class KeyboardControllable : Controllable
 
 public class MouseControllable : Controllable
 {
-    private Vector3 rotation = new Vector3();
-    private float tile = 4f;
     public Quaternion Rotation { get; set; }
     public Vector3 Position { get; set; }
-    private float speed = 200;
-    private float angle = 0f;
 
+    private MouseController mc;
+    private ControllableParameters param;
+    private Vector3 rotation = new Vector3();
+
+    public MouseControllable(ControllableParameters param)
+    {
+        this.param = param;
+        try
+        {
+            mc = GameObject.FindGameObjectWithTag("MouseController").GetComponent<MouseController>();
+        }
+        catch (Exception ex) when (ex is UnityException || ex is NullReferenceException)
+        {
+            Debug.Log(ex);
+        }
+        
+    }
     public bool fireClicked()
     {
         return Input.GetKeyDown(KeyCode.Mouse0);
     }
 
-    public void Update(GameObject target)
+    public void Update()
     {
-        float offset = 100;
-        float sens = 0.05f;
-        Vector3 mouse_pos = Input.mousePosition;
-        mouse_pos.z = 5f; //The distance between the camera and object
-        
-        Vector3 object_pos = Camera.main.WorldToScreenPoint(target.transform.position);
-
-        float angleY = 2*Mathf.Atan2(sens*(mouse_pos.x - object_pos.x), mouse_pos.z) * Mathf.Rad2Deg;
-
-        float angleX = - Mathf.Atan2(sens * (mouse_pos.y - object_pos.y - offset), mouse_pos.z) * Mathf.Rad2Deg;
-
-        float dw = Time.deltaTime * speed;
-        Debug.Log(angleX);
-        if (angleX >= 0 && rotation[0] + dw < angleX)
+        //Only change position if left controll is pressed => Easier to control and shoot together
+        if (Input.GetKey(KeyCode.LeftControl))
         {
-            Debug.Log("Add");
-            rotation[0] += dw;
-            
+            if (mc.Keys[MouseController.Key.MouseUp].Focused)
+            {
+                rotation[0] -= Time.deltaTime * param.Speed;
+            }
+            if (mc.Keys[MouseController.Key.MouseDown].Focused)
+            {
+                rotation[0] += Time.deltaTime * param.Speed;
+            }
+            if (mc.Keys[MouseController.Key.MouseLeft].Focused)
+            {
+                rotation[1] -= Time.deltaTime * param.Speed;
+            }
+            if (mc.Keys[MouseController.Key.MouseRight].Focused)
+            {
+                rotation[1] += Time.deltaTime * param.Speed;
+            }
+            param.Boundary.inBounds(rotation, out rotation);
+            Rotation = Quaternion.Euler(rotation);
         }
-        else if(angleX < 0 && rotation[0] - dw > angleX)
-        {
-            Debug.Log("Sub");
-            rotation[0] -= dw;
-        }
-
-        if (angleY >= 0 && rotation[1] + dw < angleY)
-        {
-            Debug.Log("Add");
-            rotation[1] += dw;
-
-        }
-        else if (angleY < 0 && rotation[1] - dw > angleY)
-        {
-            Debug.Log("Sub");
-            rotation[1] -= dw;
-        }
-        Rotation = Quaternion.Euler(rotation);
-
-        //rotation[0] -= Input.GetAxis("Mouse Y") * tile;
-        //rotation[1] += Input.GetAxis("Mouse X") * tile;
-        //Rotation = Quaternion.Euler(rotation[0], rotation[1], rotation[2]);
-
-
-    }
-
-    public void UpdateControl()
-    {
-        //throw new System.NotImplementedException();
     }
 }
 
-
 public class CannonController : MonoBehaviour
 {
-    public MouseController m;
-    public float speed;
-    public float cbSpeed;
-    public float movement;
     public GameObject cannonball;
     public Transform spawnPosition;
     public float fireRate;
+    public float cannonballSpeed;
+    public float pathSpeed;
     public AudioClip shootSound;
     public UnityEngine.UI.Slider pathProgress;
 
-    public Controllable Controllable { get; set; }
+    public Controllable controllable { get; set; }
 
     private AudioSource source;
     private Vector3[] path;
     private int current;
     private float nextFire;
 
-
     void Start()
     {
+        ControllableParameters p = new ControllableParameters();
+        p.Speed = 80;
+        p.Boundary = new Boundary(new Vector3(-180, -180, -180), new Vector3(180, 180, 180));
+        controllable = new MouseControllable(p);
+
+        source = gameObject.AddComponent<AudioSource>();    //Add audio source to play sounds afterwards
+
+        try
+        {
+            //Try getting the path points from linerenderer component
+            LineRenderer lr = GetComponent<LineRenderer>();
+            path = new Vector3[lr.positionCount];
+            lr.GetPositions(path);
+        }
+        catch(UnityException ex)
+        {
+            Debug.Log(ex);
+        }
         
-        Controllable = m;
-        source = gameObject.AddComponent<AudioSource>();
-
-        LineRenderer lr = GetComponent<LineRenderer>();
-        path = new Vector3[lr.positionCount];
-        lr.GetPositions(path);
-
+        //Init slider
         pathProgress.minValue = 0;
         pathProgress.maxValue = path.Length - 1;
         pathProgress.value = pathProgress.minValue;
@@ -203,32 +204,35 @@ public class CannonController : MonoBehaviour
 
     void Update()
     {
-        if (Controllable.fireClicked() && Time.time > nextFire)
+        //Fire a cannonball if button clicked
+        if (controllable.fireClicked() && Time.time > nextFire)
         {          
+            //Fire a cannonball with sound
             source.PlayOneShot(shootSound);
             GameObject g = Instantiate(cannonball, spawnPosition.position, transform.rotation);
-            g.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, cbSpeed));
+            g.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, cannonballSpeed));
             nextFire = Time.time + fireRate;
         }
 
-        transform.rotation = Controllable.Rotation;
+    }
 
+    void FixedUpdate()
+    {
+        //Get rotation from controllable
+        controllable.Update();
+        transform.rotation = controllable.Rotation;
+
+        //Move cannon along path
         if (transform.position != path[current])
         {
-            Vector3 next = Vector3.MoveTowards(transform.position, path[current], speed * Time.deltaTime);
+            Vector3 next = Vector3.MoveTowards(transform.position, path[current], pathSpeed * Time.deltaTime);
             GetComponent<Rigidbody>().MovePosition(next);
-            
         }
         else if (current < path.Length - 1)
         {
             current++;
             pathProgress.value = current;
         }
-    }
-
-    void FixedUpdate()
-    {
-        Controllable.UpdateControl();  //Update controllable
     }
 
     public bool isFinished()

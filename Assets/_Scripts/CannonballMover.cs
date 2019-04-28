@@ -12,9 +12,9 @@ public class CannonballMover : MonoBehaviour
         GetComponent<Rigidbody>().velocity = transform.forward * speed;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter(Collider other)
     {
-        
+        //Destroy the cannonball if it collides with any target
+        Destroy(this.gameObject);
     }
 }

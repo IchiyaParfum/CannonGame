@@ -11,21 +11,6 @@ public enum GameState
     Finished
 }
 
-public class MySceneManager
-{
-    private static int nOfTargets = 1;
-
-    public static void LoadScene(string name, int nOfTargets)
-    {
-        MySceneManager.nOfTargets = nOfTargets;
-        Application.LoadLevel(name);
-    }
-
-    public static int GetSceneArgs()
-    {
-        return MySceneManager.nOfTargets;
-    }
-}
 
 public class GameLogic : MonoBehaviour
 {
@@ -42,18 +27,24 @@ public class GameLogic : MonoBehaviour
     private int totalLevels;
     private int intactTargets;
     private int aliveTargets;
-      
+    
+    
+    public GameLogic()
+    {
+        
+    }
+
     void Start()
     {
         totalLevels = spawn.Length;
 
         //Load targets at random and place them on random spawn locations
         List<int> possible = Enumerable.Range(0, spawn.Length).ToList();
-        for (int i = 0; i < Mathf.Min(MySceneManager.GetSceneArgs(), spawn.Length); i++)
+        for (int i = 0; i < Mathf.Min(1, spawn.Length); i++)
         {
             //Choose random target from list
             GameObject g = targets[Random.Range(0, targets.Length)];
-            HouseBehaviour hb = g.GetComponent<HouseBehaviour>();
+            Target hb = g.GetComponent<Target>();
             hb.gameLogic = this;
             totalScore += hb.scoreValue;
             //Choose random spawn location for target and disable it for next round
@@ -67,7 +58,7 @@ public class GameLogic : MonoBehaviour
         }
         UpdateScore();
         UpdateCenter("");
-        UpdateLevel(MySceneManager.GetSceneArgs());
+        UpdateLevel(3);
     }
 
     void Update()
@@ -93,14 +84,14 @@ public class GameLogic : MonoBehaviour
                 if (aliveTargets <= 0)
                 {
                     //All targets have been destroyed
-                    if (MySceneManager.GetSceneArgs() >= totalLevels)
+                    if (totalLevels >= totalLevels)
                     {
                         UpdateCenter("You Won");
                     }
                     else
                     {
                         //Load next level with one more target
-                        MySceneManager.LoadScene("Minigame", MySceneManager.GetSceneArgs() + 1);
+                        MySceneManager.LoadScene(MySceneManager.Scenes.Game);
                     }
                 }
                 break;
@@ -108,19 +99,19 @@ public class GameLogic : MonoBehaviour
                 //Wait for user to press any button
                 if (Input.anyKeyDown)
                 {
-                    MySceneManager.LoadScene("Minigame", 1);
+                    MySceneManager.LoadScene(MySceneManager.Scenes.Game);
                 }
                 break;
         }
     }
 
-    public void TargetHit(HouseBehaviour target)
+    public void TargetHit(Target target)
     {
         AddScore(target.scoreValue);
         intactTargets--;
     }
 
-    public void TargetDestroyed(HouseBehaviour target)
+    public void TargetDestroyed(Target target)
     {
         aliveTargets--;
     }

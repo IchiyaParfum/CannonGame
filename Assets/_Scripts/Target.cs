@@ -7,7 +7,7 @@ using Unity.Jobs;
 
 
 [RequireComponent(typeof(AudioSource))]
-public class HouseBehaviour : MonoBehaviour
+public class Target : MonoBehaviour
 {
     public GameLogic gameLogic;
     public int scoreValue;
