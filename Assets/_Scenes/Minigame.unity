@@ -1175,7 +1175,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1929591906}
         m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
@@ -1545,7 +1545,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1929591906}
         m_MethodName: LoadMenu
         m_Mode: 1
         m_Arguments:
@@ -2019,7 +2019,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1929591906}
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -5154,5 +5154,10 @@ PrefabInstance:
       propertyPath: spawn.Array.data[4]
       value: 
       objectReference: {fileID: 30669305}
+    - target: {fileID: 8219687847495449219, guid: 9f757a987c1ae124fbcf0fbafd2206c0,
+        type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f757a987c1ae124fbcf0fbafd2206c0, type: 3}

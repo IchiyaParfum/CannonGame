@@ -9,41 +9,33 @@ using Unity.Jobs;
 [RequireComponent(typeof(AudioSource))]
 public class HouseBehaviour : MonoBehaviour
 {
+    public GameLogic gameLogic;
     public int scoreValue;
-    public bool isDestroyed = false;
     public AudioClip destructionSound;
     public AudioClip screamingSound;
+    public bool IsDestroyed { get; private set; }   //Property read only
 
     private AudioSource source;
-    private GameLogic gameController;
     private float destructionDelay;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject gameControllerObject = GameObject.FindWithTag("GameLogic");
-        if (gameControllerObject != null)
-        {
-            gameController = gameControllerObject.GetComponent<GameLogic>();
-        }
-        source = gameObject.AddComponent<AudioSource>();
-        destructionDelay = Mathf.Max(destructionSound.length, screamingSound.length);
+        source = gameObject.AddComponent<AudioSource>();    //Create AudioSource component on game object to play sounds afterwards
+        destructionDelay = Mathf.Max(destructionSound.length, screamingSound.length); 
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Cannonball"))
         {
-            isDestroyed = true;
+            IsDestroyed = true;
             source.PlayOneShot(destructionSound);
             source.PlayOneShot(screamingSound);
+
+            //Add Ridgid body and BoxCollider to children => Explosion
             foreach (Transform child in transform)
             {
                 child.gameObject.AddComponent<Rigidbody>();
@@ -51,8 +43,8 @@ public class HouseBehaviour : MonoBehaviour
             }
 
             GetComponent<Collider>().enabled = false;   //Building cant be hit anymore
-            gameController.AddScore(scoreValue);    //Add score on game controller
-            Invoke("DestroyBuilding", destructionDelay);
+            gameLogic.TargetHit(this);    //Tell game logic that target has been hit
+            Invoke("DestroyBuilding", destructionDelay);    //Destroy target object after animation sound
             
         }
 
@@ -60,8 +52,8 @@ public class HouseBehaviour : MonoBehaviour
 
     void DestroyBuilding()
     {
-        gameController.TargetDestroyed(gameObject);
-        Destroy(this.gameObject); //Destroy game object with delay
+        gameLogic.TargetDestroyed(this);    //Tell game logic that target has been destroyed => Animation finished
+        Destroy(this.gameObject); //Destroy game object immediately
     }
 
 

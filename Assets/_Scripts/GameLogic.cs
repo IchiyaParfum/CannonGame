@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+
+public enum GameState
+{
+    Active,
+    GameOver,
+    Finished
+}
 
 public class MySceneManager
 {
@@ -28,32 +36,34 @@ public class GameLogic : MonoBehaviour
     public Text centerText;
     public Text levelText;
 
+    private GameState state = GameState.Active;
     private int score;
     private int totalScore;
     private int totalLevels;
-    private ArrayList tar;
+    private int intactTargets;
+    private int aliveTargets;
       
-
     void Start()
     {
-        Time.timeScale = 1;
-        score = 0;
-        totalScore = 0;
         totalLevels = spawn.Length;
 
-        //Load targets at random into loadedTargets and place them on random spawn locations
-        ArrayList spawns = new ArrayList(spawn);
-        tar = new ArrayList();
-        for(int i = 0; i < Mathf.Min(MySceneManager.GetSceneArgs(), spawn.Length); i++)
+        //Load targets at random and place them on random spawn locations
+        List<int> possible = Enumerable.Range(0, spawn.Length).ToList();
+        for (int i = 0; i < Mathf.Min(MySceneManager.GetSceneArgs(), spawn.Length); i++)
         {
+            //Choose random target from list
             GameObject g = targets[Random.Range(0, targets.Length)];
-            totalScore += g.GetComponent<HouseBehaviour>().scoreValue;
-
-            int rnd = Random.Range(0, spawns.Count);
-            GameObject s = (GameObject) spawns[rnd];
-            spawns.RemoveAt(rnd);
-
-            tar.Add(Instantiate(g, s.transform.position, s.transform.rotation));
+            HouseBehaviour hb = g.GetComponent<HouseBehaviour>();
+            hb.gameLogic = this;
+            totalScore += hb.scoreValue;
+            //Choose random spawn location for target and disable it for next round
+            int index = Random.Range(0, possible.Count);
+            GameObject s = spawn[possible[index]];
+            possible.RemoveAt(index);
+            //Create target
+            Instantiate(g, s.transform.position, s.transform.rotation);
+            intactTargets++;
+            aliveTargets++;
         }
         UpdateScore();
         UpdateCenter("");
@@ -62,57 +72,60 @@ public class GameLogic : MonoBehaviour
 
     void Update()
     {
-
-        if (isFinished() && MySceneManager.GetSceneArgs() >= totalLevels)
+        switch (state)
         {
-            Time.timeScale = 0; //Stops physics
-            UpdateCenter("Game finished\nPress any key to restart");
-            if (Input.anyKeyDown && tar.Count == 0)
-            {
-                MySceneManager.LoadScene("Menu", 1);
-            }
+            case GameState.Active:
+                //Wait for all buildings to be hit
+                if(intactTargets <= 0)
+                {
+                    //All buildings hit => succeeded
+                    UpdateCenter("Level accomplished");
+                    state = GameState.Finished;
+                }else if (cannonController.isFinished())
+                {
+                    //Path finished => lost
+                    UpdateCenter("Game Over");
+                    state = GameState.GameOver;
+                }
+                break;
+            case GameState.Finished:
+                //Wait for all buildings to be destroyed               
+                if (aliveTargets <= 0)
+                {
+                    //All targets have been destroyed
+                    if (MySceneManager.GetSceneArgs() >= totalLevels)
+                    {
+                        UpdateCenter("You Won");
+                    }
+                    else
+                    {
+                        //Load next level with one more target
+                        MySceneManager.LoadScene("Minigame", MySceneManager.GetSceneArgs() + 1);
+                    }
+                }
+                break;
+            case GameState.GameOver:
+                //Wait for user to press any button
+                if (Input.anyKeyDown)
+                {
+                    MySceneManager.LoadScene("Minigame", 1);
+                }
+                break;
         }
-        else if(isFinished())
-        {
-            
-            UpdateCenter("Level finished\nPress R to continue");
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Time.timeScale = 0; //Stops physics
-                MySceneManager.LoadScene("Minigame", MySceneManager.GetSceneArgs() + 1);
-            }
-        }
-        else if (isGameOver())
-        {
-            Time.timeScale = 0; //Stops physics
-            UpdateCenter("Game Over\nPress any key to restart");
-            if (Input.anyKeyDown)
-            {
-                MySceneManager.LoadScene("Minigame", 1);
-            }
-        }
-        
     }
 
-    bool isFinished()
+    public void TargetHit(HouseBehaviour target)
     {
-        return score >= totalScore;
+        AddScore(target.scoreValue);
+        intactTargets--;
     }
 
-    bool isGameOver()
+    public void TargetDestroyed(HouseBehaviour target)
     {
-        return cannonController.isFinished();
+        aliveTargets--;
     }
 
-    public void TargetDestroyed(GameObject target)
-    {
-        if (target.tag.Equals("Target"))
-        {
-            tar.Remove(target);
-        }
-    }
-
-    public void AddScore(int newScoreValue)
+    void AddScore(int newScoreValue)
     {
         score += newScoreValue;
         UpdateScore();
