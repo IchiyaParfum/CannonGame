@@ -230,7 +230,7 @@ public class CannonController : MonoBehaviour
             Debug.Log(ex);
         }
         
-        //Init slider
+        //Init slider to display remaining path
         pathProgress.minValue = 0;
         pathProgress.maxValue = path.Length - 1;
         pathProgress.value = pathProgress.minValue;
@@ -240,9 +240,9 @@ public class CannonController : MonoBehaviour
     {
         //Fire a cannonball if button clicked
         if (controllable.fireClicked() && Time.time > nextFire)
-        {          
+        {
             //Fire a cannonball with sound
-            source.PlayOneShot(shootSound);
+            MyAudioManager.Instance.PlayEffect(shootSound);
             GameObject g = Instantiate(cannonball, spawnPosition.position, transform.rotation);
             g.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, cannonballSpeed));
             nextFire = Time.time + fireRate;

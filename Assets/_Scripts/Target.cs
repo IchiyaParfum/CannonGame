@@ -6,25 +6,22 @@ using UnityEngine;
 using Unity.Jobs;
 
 
-[RequireComponent(typeof(AudioSource))]
 public class Target : MonoBehaviour
 {
-    public GameLogic gameLogic;
     public int scoreValue;
     public AudioClip destructionSound;
+
     public AudioClip screamingSound;
     public bool IsDestroyed { get; private set; }   //Property read only
+    public GameLogic gameLogic { get; set; }
 
-    private AudioSource source;
     private float destructionDelay;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        source = gameObject.AddComponent<AudioSource>();    //Create AudioSource component on game object to play sounds afterwards
         destructionDelay = Mathf.Max(destructionSound.length, screamingSound.length); 
-
     }
 
     void OnTriggerEnter(Collider other)
@@ -32,8 +29,8 @@ public class Target : MonoBehaviour
         if (other.gameObject.CompareTag("Cannonball"))
         {
             IsDestroyed = true;
-            source.PlayOneShot(destructionSound);
-            source.PlayOneShot(screamingSound);
+            MyAudioManager.Instance.PlayEffect(destructionSound);
+            MyAudioManager.Instance.PlayEffect(screamingSound);
 
             //Add Ridgid body and BoxCollider to children => Explosion
             foreach (Transform child in transform)

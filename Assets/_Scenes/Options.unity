@@ -822,6 +822,11 @@ PrefabInstance:
       propertyPath: m_Volume
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9058927986565597260, guid: 57b8e455cfa10e04496f63e8eb2ccfe3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57b8e455cfa10e04496f63e8eb2ccfe3, type: 3}
 --- !u!1 &447044736
@@ -1159,6 +1164,7 @@ MonoBehaviour:
   volumeSlider: {fileID: 1252362180}
   difficultyToggles: {fileID: 1098353384}
   controllerToggles: {fileID: 121155671}
+  backgroundMusic: {fileID: 8300000, guid: 2923448de5293b84aa0fe990382804b4, type: 3}
 --- !u!1 &632730843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,7 +1384,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &911578596
 GameObject:
@@ -2061,7 +2067,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 911578597}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100
+  m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -2793,11 +2799,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3221080789016955477, guid: 67ff7e5153841d44399989df786085d7,
-        type: 3}
-      propertyPath: m_Text
-      value: MENU
-      objectReference: {fileID: 0}
     - target: {fileID: 2223602479409457024, guid: 67ff7e5153841d44399989df786085d7,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -2807,6 +2808,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OpenMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3221080789016955477, guid: 67ff7e5153841d44399989df786085d7,
+        type: 3}
+      propertyPath: m_Text
+      value: MENU
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67ff7e5153841d44399989df786085d7, type: 3}
@@ -2988,7 +2994,7 @@ RectTransform:
   - {fileID: 817825015}
   - {fileID: 593367660}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

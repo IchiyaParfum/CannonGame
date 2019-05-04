@@ -47,15 +47,17 @@ public class GameLogic : MonoBehaviour
         {
             //Choose random target from list
             GameObject g = targets[Random.Range(0, targets.Length)];
-            Target hb = g.GetComponent<Target>();
-            hb.gameLogic = this;
-            totalScore += hb.scoreValue;
+            
             //Choose random spawn location for target and disable it for next round
             int index = Random.Range(0, possible.Count);
             GameObject s = spawn[possible[index]];
             possible.RemoveAt(index);
             //Create target
-            Instantiate(g, s.transform.position, s.transform.rotation);
+            g = Instantiate(g, s.transform.position, s.transform.rotation);
+            Target hb = g.GetComponent<Target>();
+            hb.gameLogic = this;
+            totalScore += hb.scoreValue;
+
             intactTargets++;
             aliveTargets++;
         }
