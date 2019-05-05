@@ -11,13 +11,13 @@ public class MainMenu : MonoBehaviour
     public void PlayGame()
     {
         MyAudioManager.Instance.StopMusic();
-        MySceneManager.Parameters.Level = 1;
-        MySceneManager.LoadScene(MySceneManager.Scenes.Game);
+        MySceneManager.Instance.Parameters.Level = 1;
+        MySceneManager.Instance.LoadScene(MySceneManager.Scenes.Game);
     }
 
     public void OpenOptions()
     {
-        MySceneManager.LoadScene(MySceneManager.Scenes.Options);
+        MySceneManager.Instance.LoadScene(MySceneManager.Scenes.Options);
     }
     public void QuitGame()
     {

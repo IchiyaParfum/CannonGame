@@ -52,6 +52,6 @@ public class GameMenu : MonoBehaviour
 
     public void LoadMenu()
     {
-        MySceneManager.LoadScene(MySceneManager.Scenes.Menu);
+        MySceneManager.Instance.LoadScene(MySceneManager.Scenes.Menu);
     }
 }

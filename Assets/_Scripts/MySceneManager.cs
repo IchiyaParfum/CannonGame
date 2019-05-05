@@ -41,14 +41,20 @@ public class SceneParameters
 
 public class MySceneManager
 {
+    public static MySceneManager Instance = null;
+
     static MySceneManager()
     {
+        if(Instance == null)
+        {
+            Instance = new MySceneManager();
+        }
         //Create default parameters
         SceneParameters p = new SceneParameters();
         p.Difficulty = Difficulty.Medium;
         p.Level = 1;
         p.Volume = 1f;
-        Parameters = p;
+        Instance.Parameters = p;
     }
 
     public sealed class Scenes
@@ -64,9 +70,9 @@ public class MySceneManager
 
         public string Value { get; private set; }
     }
-    public static SceneParameters Parameters { get; set; }
+    public SceneParameters Parameters { get; set; }
 
-    public static void LoadScene(Scenes scene)
+    public void LoadScene(Scenes scene)
     {
         Application.LoadLevel(scene.Value);
     }

@@ -1,42 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class MyAudioManager : MonoBehaviour
+public class MyAudioManager
 {
-    // Audio players components.
-    public AudioSource EffectsSource;
-    public AudioSource BackgroundSource;
-    public AudioSource MenuSource;
-
-    public AudioClip MenuSound;
-    public AudioClip BackgroundSound;
-
     // Random pitch adjustment range.
     public float LowPitchRange = .95f;
     public float HighPitchRange = 1.05f;
 
+    //Resources path relative to Resources Folder. !!!DO NOT INCLUDE FILE EXTENSION
+    public const string MenuSoundFile = "_Audio/Swords_Collide-Sound_Explorer-2015600826";
+    public const string BackgroundSoundFile = "_Audio/MedievalInnMusic";
+
     // Singleton instance.
     public static MyAudioManager Instance = null;
 
-    private float volume = 0.5f;
+
+    // Audio players components.
+    private AudioSource EffectsSource;
+    private AudioSource BackgroundSource;
+    private AudioSource MenuSource;
+
+    private AudioClip MenuSound;
+    private AudioClip BackgroundSound;
 
     // Initialize the singleton instance.
-    private void Awake()
+    static MyAudioManager()
     {
         // If there is not already an instance of SoundManager, set it to this.
         if (Instance == null)
         {
-            Instance = this;
+            Instance = new MyAudioManager();
         }
-        //If an instance already exists, destroy whatever this object is to enforce the singleton.
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
+    }
 
-        //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
-        DontDestroyOnLoad(gameObject);
+    private MyAudioManager()
+    {
+        GameObject g = new GameObject("MyAudioManager");
+        MonoBehaviour.DontDestroyOnLoad(g);
+        MenuSource = g.AddComponent<AudioSource>();
+        EffectsSource = g.AddComponent<AudioSource>();
+        BackgroundSource = g.AddComponent<AudioSource>();
+
+        try
+        {
+            MenuSound = Resources.Load<AudioClip>(MenuSoundFile);
+            BackgroundSound = Resources.Load<AudioClip>(BackgroundSoundFile);
+            Debug.Log(BackgroundSound);
+
+        }
+        catch (UnityException ex)
+        {
+            Debug.LogError(ex);
+        }
     }
 
     //Sets volume scale of audio sources (0 to 1.0)
@@ -50,7 +67,7 @@ public class MyAudioManager : MonoBehaviour
     // Play a single clip through the sound effects source.
     public void PlayEffect(AudioClip clip)
     {
-        float randomPitch = Random.Range(LowPitchRange, HighPitchRange);
+        float randomPitch = UnityEngine.Random.Range(LowPitchRange, HighPitchRange);
 
         EffectsSource.pitch = randomPitch;
         EffectsSource.clip = clip;
@@ -67,6 +84,7 @@ public class MyAudioManager : MonoBehaviour
     {
         if (BackgroundSource.clip != clip || !BackgroundSource.isPlaying)
         {
+            Debug.Log("Play Music");
             BackgroundSource.Stop();
             BackgroundSource.loop = true;
             BackgroundSource.clip = clip;

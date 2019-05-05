@@ -43,7 +43,7 @@ public class GameLogic : MonoBehaviour
 
         //Load targets at random and place them on random spawn locations
         List<int> possible = Enumerable.Range(0, spawn.Length).ToList();
-        for (int i = 0; i < Mathf.Min(getBuildingCount(MySceneManager.Parameters.Level, MySceneManager.Parameters.Difficulty), spawn.Length); i++)
+        for (int i = 0; i < Mathf.Min(getBuildingCount(MySceneManager.Instance.Parameters.Level, MySceneManager.Instance.Parameters.Difficulty), spawn.Length); i++)
         {
             //Choose random target from list
             GameObject g = targets[Random.Range(0, targets.Length)];
@@ -63,7 +63,7 @@ public class GameLogic : MonoBehaviour
         }
         UpdateScore();
         UpdateCenter("");
-        UpdateLevel(MySceneManager.Parameters.Level);
+        UpdateLevel(MySceneManager.Instance.Parameters.Level);
     }
 
     void Update()
@@ -89,15 +89,15 @@ public class GameLogic : MonoBehaviour
                 if (aliveTargets <= 0)
                 {
                     //All targets have been destroyed
-                    if (getBuildingCount(MySceneManager.Parameters.Level, MySceneManager.Parameters.Difficulty) >= totalLevels)
+                    if (getBuildingCount(MySceneManager.Instance.Parameters.Level, MySceneManager.Instance.Parameters.Difficulty) >= totalLevels)
                     {
                         UpdateCenter("You Won");
                     }
                     else
                     {
                         //Load next level
-                        MySceneManager.Parameters.Level++;
-                        MySceneManager.LoadScene(MySceneManager.Scenes.Game);
+                        MySceneManager.Instance.Parameters.Level++;
+                        MySceneManager.Instance.LoadScene(MySceneManager.Scenes.Game);
                     }
                 }
                 break;
@@ -105,7 +105,7 @@ public class GameLogic : MonoBehaviour
                 //Wait for user to press any button
                 if (Input.anyKeyDown)
                 {
-                    MySceneManager.LoadScene(MySceneManager.Scenes.Menu);
+                    MySceneManager.Instance.LoadScene(MySceneManager.Scenes.Menu);
                 }
                 break;
         }

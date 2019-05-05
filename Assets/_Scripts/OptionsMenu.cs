@@ -11,7 +11,7 @@ public class OptionsMenu : MonoBehaviour
 
     void Start()
     {
-        volumeSlider.value = MySceneManager.Parameters.Volume;
+        volumeSlider.value = MySceneManager.Instance.Parameters.Volume;
         volumeSlider.onValueChanged.AddListener(delegate { OnValueChanged(volumeSlider.value); });
  
         difficultyToggles.onChange += DifficultyToggles_onChange;
@@ -23,24 +23,24 @@ public class OptionsMenu : MonoBehaviour
     private void ControllerToggles_onChange(object sender, System.EventArgs e)
     {
         MyAudioManager.Instance.PlayMenu();
-        MySceneManager.Parameters.Controllables = (ControllableFactory.Controllables)controllerToggles.ActiveToggle;
+        MySceneManager.Instance.Parameters.Controllables = (ControllableFactory.Controllables)controllerToggles.ActiveToggle;
     }
 
     private void DifficultyToggles_onChange(object sender, System.EventArgs e)
     {
         MyAudioManager.Instance.PlayMenu();
-        MySceneManager.Parameters.Difficulty = (Difficulty)difficultyToggles.ActiveToggle;
+        MySceneManager.Instance.Parameters.Difficulty = (Difficulty)difficultyToggles.ActiveToggle;
     }
 
     public void OnValueChanged(float value)
     {
-        MySceneManager.Parameters.Volume = value;
-        MyAudioManager.Instance.SetVolume(MySceneManager.Parameters.Volume);
+        MySceneManager.Instance.Parameters.Volume = value;
+        MyAudioManager.Instance.SetVolume(MySceneManager.Instance.Parameters.Volume);
         
     }
 
     public void OpenMenu()
     {
-        MySceneManager.LoadScene(MySceneManager.Scenes.Menu);
+        MySceneManager.Instance.LoadScene(MySceneManager.Scenes.Menu);
     }
 }

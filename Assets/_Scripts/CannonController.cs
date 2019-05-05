@@ -214,7 +214,7 @@ public class CannonController : MonoBehaviour
 
     void Start()
     {
-        controllable = ControllableFactory.getInstance().createControllable(MySceneManager.Parameters.Controllables);
+        controllable = ControllableFactory.getInstance().createControllable(MySceneManager.Instance.Parameters.Controllables);
 
         source = gameObject.AddComponent<AudioSource>();    //Add audio source to play sounds afterwards
 
