@@ -217,7 +217,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 144.5}
+  m_AnchoredPosition: {x: 0, y: 107.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71576856
@@ -564,7 +564,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -126, y: 68}
+  m_AnchoredPosition: {x: -20, y: 30}
   m_SizeDelta: {x: 110, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &330293885
@@ -913,6 +913,7 @@ GameObject:
   m_Component:
   - component: {fileID: 514742629}
   - component: {fileID: 514742630}
+  - component: {fileID: 514742631}
   m_Layer: 0
   m_Name: HardToggle
   m_TagString: Untagged
@@ -927,18 +928,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 514742628}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1005120392}
   - {fileID: 978556287}
-  m_Father: {fileID: 1098353383}
+  m_Father: {fileID: 1586004180}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 74, y: 106}
+  m_AnchoredPosition: {x: 128, y: 60}
   m_SizeDelta: {x: 74, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &514742630
@@ -987,6 +988,19 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
+--- !u!114 &514742631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514742628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1184210157, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &527104512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,7 +1114,7 @@ RectTransform:
   - {fileID: 1029872164}
   - {fileID: 71576855}
   - {fileID: 1949779172}
-  - {fileID: 1098353383}
+  - {fileID: 1586004180}
   - {fileID: 121155670}
   - {fileID: 1252362179}
   - {fileID: 1677873621}
@@ -1162,9 +1176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volumeSlider: {fileID: 1252362180}
-  difficultyToggles: {fileID: 1098353384}
+  difficultyToggles: {fileID: 1586004181}
   controllerToggles: {fileID: 121155671}
-  backgroundMusic: {fileID: 8300000, guid: 2923448de5293b84aa0fe990382804b4, type: 3}
 --- !u!1 &632730843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1649,7 +1662,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -255.5, y: 67}
+  m_AnchoredPosition: {x: -160, y: 30}
   m_SizeDelta: {x: 76, y: 17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1029872165
@@ -1784,56 +1797,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1047141749}
   m_CullTransparentMesh: 0
---- !u!1 &1098353382
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1098353383}
-  - component: {fileID: 1098353384}
-  m_Layer: 0
-  m_Name: DifficultyToggleGroup
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1098353383
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1098353382}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1273029906}
-  - {fileID: 1371455236}
-  - {fileID: 514742629}
-  m_Father: {fileID: 593367660}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1098353384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1098353382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5976dabf5be52224fa0486feef250f7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toggles:
-  - {fileID: 1273029907}
-  - {fileID: 1371455237}
-  - {fileID: 514742630}
 --- !u!1 &1232531922
 GameObject:
   m_ObjectHideFlags: 0
@@ -2023,7 +1986,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -80, y: 27}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1252362180
@@ -2085,6 +2048,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1273029906}
   - component: {fileID: 1273029907}
+  - component: {fileID: 1273029908}
   m_Layer: 5
   m_Name: EasyToggle
   m_TagString: Untagged
@@ -2105,12 +2069,12 @@ RectTransform:
   m_Children:
   - {fileID: 2022414973}
   - {fileID: 1638824932}
-  m_Father: {fileID: 1098353383}
+  m_Father: {fileID: 1586004180}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -133, y: 106}
+  m_AnchoredPosition: {x: -37, y: 61}
   m_SizeDelta: {x: 75.8, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1273029907
@@ -2155,21 +2119,23 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 593367663}
-        m_MethodName: Toggle
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: ds
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1
+--- !u!114 &1273029908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273029905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1184210157, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &1289196025
 GameObject:
   m_ObjectHideFlags: 0
@@ -2285,7 +2251,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.449997, y: 68}
+  m_AnchoredPosition: {x: 105, y: 30}
   m_SizeDelta: {x: 110.9, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1298301283
@@ -2382,7 +2348,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -264.5, y: 24}
+  m_AnchoredPosition: {x: -169, y: 0}
   m_SizeDelta: {x: 58, y: 17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1338273748
@@ -2526,6 +2492,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1371455236}
   - component: {fileID: 1371455237}
+  - component: {fileID: 1371455238}
   m_Layer: 0
   m_Name: MediumToggle
   m_TagString: Untagged
@@ -2540,18 +2507,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1371455235}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1976903141}
   - {fileID: 1289196026}
-  m_Father: {fileID: 1098353383}
+  m_Father: {fileID: 1586004180}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -30, y: 104}
+  m_AnchoredPosition: {x: 38, y: 60}
   m_SizeDelta: {x: 81, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1371455237
@@ -2600,6 +2567,19 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
+--- !u!114 &1371455238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371455235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1184210157, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!1 &1371879577
 GameObject:
   m_ObjectHideFlags: 0
@@ -2752,12 +2732,12 @@ PrefabInstance:
     - target: {fileID: 348064657052595025, guid: 67ff7e5153841d44399989df786085d7,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -331
+      value: -221.5
       objectReference: {fileID: 0}
     - target: {fileID: 348064657052595025, guid: 67ff7e5153841d44399989df786085d7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -130.5
+      value: -93.5
       objectReference: {fileID: 0}
     - target: {fileID: 348064657052595025, guid: 67ff7e5153841d44399989df786085d7,
         type: 3}
@@ -2816,6 +2796,61 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67ff7e5153841d44399989df786085d7, type: 3}
+--- !u!1 &1586004179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1586004180}
+  - component: {fileID: 1586004181}
+  m_Layer: 0
+  m_Name: DifficultyToggleGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1586004180
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586004179}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1273029906}
+  - {fileID: 1371455236}
+  - {fileID: 514742629}
+  m_Father: {fileID: 593367660}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1586004181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586004179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5976dabf5be52224fa0486feef250f7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggles:
+  - {fileID: 1273029907}
+  - {fileID: 1371455237}
+  - {fileID: 514742630}
 --- !u!1 &1638824931
 GameObject:
   m_ObjectHideFlags: 0
@@ -3072,7 +3107,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -260, y: 106}
+  m_AnchoredPosition: {x: -164.5, y: 60}
   m_SizeDelta: {x: 67, y: 17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1949779173

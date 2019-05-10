@@ -12,6 +12,7 @@ public class MyToggleGroup : MonoBehaviour
     public event OnChangeHandler onChange;
 
     public int ActiveToggle { get; private set; }
+    private System.Object lockObject = new System.Object();
 
     void Start()
     {
@@ -44,7 +45,7 @@ public class MyToggleGroup : MonoBehaviour
 
     void onValueChanged(Toggle t)
     {
-        lock (toggles)
+        lock (lockObject)
         {
             if (t.isOn)
             {
@@ -69,5 +70,10 @@ public class MyToggleGroup : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void setActive(int i)
+    {
+        toggles[i].isOn = true;
     }
 }

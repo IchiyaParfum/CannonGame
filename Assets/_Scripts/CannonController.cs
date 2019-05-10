@@ -5,7 +5,7 @@ using System;
 
 public class ControllableFactory
 {
-    private ControllableFactory factory;
+    private static ControllableFactory factory;
     public enum Controllables
     {
         Keyboard = 0,
@@ -19,7 +19,11 @@ public class ControllableFactory
     }
     public static ControllableFactory getInstance()
     {
-        return new ControllableFactory();
+        if(factory == null)
+        {
+            factory = new ControllableFactory();
+        }
+        return factory;
     }
     public Controllable createControllable(Controllables c, ControllableParameters p)
     {
@@ -207,7 +211,6 @@ public class CannonController : MonoBehaviour
 
     public Controllable controllable { get; set; }
 
-    private AudioSource source;
     private Vector3[] path;
     private int current;
     private float nextFire;
@@ -215,8 +218,6 @@ public class CannonController : MonoBehaviour
     void Start()
     {
         controllable = ControllableFactory.getInstance().createControllable(MySceneManager.Instance.Parameters.Controllables);
-
-        source = gameObject.AddComponent<AudioSource>();    //Add audio source to play sounds afterwards
 
         try
         {

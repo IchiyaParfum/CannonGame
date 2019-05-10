@@ -52,6 +52,7 @@ public class MySceneManager
         //Create default parameters
         SceneParameters p = new SceneParameters();
         p.Difficulty = Difficulty.Medium;
+        p.Controllables = ControllableFactory.Controllables.Keyboard;
         p.Level = 1;
         p.Volume = 1f;
         Instance.Parameters = p;

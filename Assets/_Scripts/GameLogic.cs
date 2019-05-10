@@ -12,7 +12,6 @@ public enum Difficulty
     Hard = 2
 }
 
-
 public class GameLogic : MonoBehaviour
 {
     public GameObject[] spawn;
@@ -26,6 +25,7 @@ public class GameLogic : MonoBehaviour
     private int score;
     private int totalScore;
     private int totalLevels;
+    private int totalTargets;
     private int intactTargets;
     private int aliveTargets;
 
@@ -43,11 +43,13 @@ public class GameLogic : MonoBehaviour
 
         //Load targets at random and place them on random spawn locations
         List<int> possible = Enumerable.Range(0, spawn.Length).ToList();
-        for (int i = 0; i < Mathf.Min(getBuildingCount(MySceneManager.Instance.Parameters.Level, MySceneManager.Instance.Parameters.Difficulty), spawn.Length); i++)
+        totalTargets = Mathf.Min(MySceneManager.Instance.Parameters.Level, spawn.Length);
+        for (int i = 0; i < totalTargets; i++)
         {
             //Choose random target from list
-            GameObject g = targets[Random.Range(0, targets.Length)];
-            
+            //GameObject g = targets[Random.Range(0, targets.Length)];
+            GameObject g = getRandomTarget(MySceneManager.Instance.Parameters.Difficulty, targets);
+
             //Choose random spawn location for target and disable it for next round
             int index = Random.Range(0, possible.Count);
             GameObject s = spawn[possible[index]];
@@ -89,9 +91,10 @@ public class GameLogic : MonoBehaviour
                 if (aliveTargets <= 0)
                 {
                     //All targets have been destroyed
-                    if (getBuildingCount(MySceneManager.Instance.Parameters.Level, MySceneManager.Instance.Parameters.Difficulty) >= totalLevels)
+                    if (MySceneManager.Instance.Parameters.Level >= totalLevels)
                     {
                         UpdateCenter("You Won");
+                        state = GameState.GameOver;
                     }
                     else
                     {
@@ -111,10 +114,7 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    public static int getBuildingCount(int level, Difficulty difficulty)
-    {
-        return level;
-    }
+    
 
     public void TargetHit(Target target)
     {
@@ -127,10 +127,31 @@ public class GameLogic : MonoBehaviour
         aliveTargets--;
     }
 
+    GameObject getRandomTarget(Difficulty d, GameObject[] targets)
+    {
+        //targets array has to be ordered from difficult target to easy target
+
+        float rnd = Random.Range(0f, 1f);   //Probability between 0% and 100%
+        float perc = 0f;
+        float diff = (int)d + 1;
+        for (int i = 0; i <targets.Length; i++)
+        {
+            float a = (diff + 1) * (targets.Length) / 2f;
+            float pi = 1/a * ((1 - diff) / (targets.Length-1) * i + diff); //Probability function 
+            Debug.Log("Probability: " + pi + " at index: " + i +" with rnd: " + rnd);
+            perc += pi;
+            if (rnd < perc)
+            {
+                return targets[i];
+            }
+        }
+        return targets[targets.Length-1];     
+    }
+
     void AddScore(int newScoreValue)
     {
         score += newScoreValue;
-        UpdateScore();
+        UpdateScore(); 
     }
 
     void UpdateScore()
